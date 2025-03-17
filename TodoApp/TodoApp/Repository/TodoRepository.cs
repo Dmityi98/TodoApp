@@ -16,28 +16,28 @@ public class TodoRepository
         _context = context;
     }
     
-    public Todo GetTodoId(int id)
+    public async Task<Todo?> GetTodoIdAsync(int id, CancellationToken ct)
     {
-       return _context.Todos.FirstOrDefault(t => t.Id == id);
+       return await _context.Todos.FirstOrDefaultAsync(t => t.Id == id, ct);
     }
     
-    public  List<Todo?> GetAllTodo()
+    public async Task<List<Todo?>> GetAllTodoAsync()
     {
-         return _context.Todos.ToList();
+         return await _context.Todos.ToListAsync();
     }
 
-    public bool CreateTodo([FromBody]CreateTodoRequest request)
+    public async Task<bool> CreateTodoAsync([FromBody]CreateTodoRequest request, CancellationToken ct)
     {
         var todo = new Todo(request.Title, request.Description);
         if (false) return false;
-        _context.Add(todo);
-        _context.SaveChanges();
+        await _context.AddAsync(todo, ct);
+        await _context.SaveChangesAsync(ct);
         return true;
     }
 
-    public bool UpdateTodoId(int id, [FromBody] UpdateTodoReqest reqest)
+    public async Task<bool> UpdateTodoIdAsync(int id, [FromBody] UpdateTodoReqest reqest, CancellationToken ct)
     {
-        var updateTodo = _context.Todos.FirstOrDefault(t => t.Id == id);
+        var updateTodo = await _context.Todos.FirstOrDefaultAsync(t => t.Id == id, ct);
         if (updateTodo != null)
         {
             if (reqest.Title != null)
@@ -55,18 +55,18 @@ public class TodoRepository
                 updateTodo.IsDone = reqest.IsDone;
             }
             
-            _context.SaveChanges();
+            await _context.SaveChangesAsync(ct);
             return true; 
         }
         return false;   
     }
-    public bool DeleteTodoId(int id)
+    public async Task<bool> DeleteTodoIdAsync(int id, CancellationToken ct)
     {
-        var todo = _context.Todos.FirstOrDefault(t => t != null && t.Id == id);
+        var todo =await _context.Todos.FirstOrDefaultAsync(t => t != null && t.Id == id,ct);
         if (todo != null)
         {
             _context.Todos.Remove(todo);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync(ct);
             return true;
         }
         

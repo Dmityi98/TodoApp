@@ -20,7 +20,7 @@ namespace  TodoApp.Controllers
         [HttpPost]
         public async Task<IActionResult> CreateTodo([FromBody]CreateTodoRequest request, CancellationToken ct )
         {
-            if (_repository.CreateTodo(request))
+            if (await _repository.CreateTodoAsync(request, ct))
             {
                 return Ok();
             }
@@ -29,31 +29,31 @@ namespace  TodoApp.Controllers
 
         [HttpGet]
         [Route("/all-todo")]
-        public async Task<IActionResult> GetAllTodo()
+        public async Task<IActionResult> GetAllTodoAsync()
         {
-            return Ok(_repository.GetAllTodo());
+            return Ok(await _repository.GetAllTodoAsync());
         }
 
         [HttpGet]
         [Route("/get-todo-{id}")]
-        public async Task<IActionResult> GetTodoId(int id)
+        public async Task<IActionResult> GetTodoIdAsync(int id, CancellationToken ct)
         {
-            return Ok(_repository.GetTodoId(id));
+            return Ok( await _repository.GetTodoIdAsync(id, ct));
         }
         
         [HttpDelete]
         [Route("/delete-todo-{id}")]
-        public async Task<IActionResult> DeleteTodoId(int id)
+        public async Task<IActionResult> DeleteTodoIdAsync(int id, CancellationToken ct)
         {
-            _repository.DeleteTodoId(id);
+            await _repository.DeleteTodoIdAsync(id, ct);
             return Ok();
         }
         
         [HttpPut]
         [Route("/Update-todo-{id}")]
-        public async Task<IActionResult> UpdateTodoId(int id, UpdateTodoReqest reqest)
+        public async Task<IActionResult> UpdateTodoIdAsync(int id, UpdateTodoReqest reqest, CancellationToken ct)
         {
-            if (_repository.UpdateTodoId(id, reqest))
+            if (await _repository.UpdateTodoIdAsync(id, reqest, ct))
             {
                 return Ok();
             }
