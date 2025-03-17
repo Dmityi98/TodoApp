@@ -40,9 +40,21 @@ public class TodoRepository
         var updateTodo = _context.Todos.FirstOrDefault(t => t.Id == id);
         if (updateTodo != null)
         {
-            updateTodo.Title = reqest.Title;
-            updateTodo.Description = reqest.Description;
-            updateTodo.IsDone = reqest.IsDone;
+            if (reqest.Title != null)
+            {
+                updateTodo.Title = reqest.Title;
+            }
+
+            if (reqest.Description != null)
+            {
+                updateTodo.Description = reqest.Description;
+            }
+
+            if (true)
+            {
+                updateTodo.IsDone = reqest.IsDone;
+            }
+            
             _context.SaveChanges();
             return true; 
         }
